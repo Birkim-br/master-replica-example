@@ -46,8 +46,14 @@ master-replica-example/
 git clone https://github.com/tariqulgithub/master-replica-example.git
 cd master-replica-example
 ```
+### 2 Create network if not exist
 
-### 2. Start the containers
+```
+docker network create --driver bridge relvora-network
+docker network ls
+```
+
+### 3. Start the containers
 
 > **Warning:** For the first run, remove old volumes to allow init scripts to execute properly.
 
@@ -57,7 +63,7 @@ docker compose up -d
 ```
 
 
-### 3. Verify the setup
+### 4. Verify the setup
 
 **Check master databases:**
 
