@@ -1,0 +1,55 @@
+services:
+  mysql-master:
+    image: mysql:8.0
+    container_name: mysql-master
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3307:3306"
+    command: >
+      --server-id=1
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --gtid-mode=ON
+      --enforce-gtid-consistency=ON
+      --skip-replica-start=ON
+      --bind-address=0.0.0.0
+    volumes:
+      - master-data:/var/lib/mysql
+      - ./master-init:/docker-entrypoint-initdb.d
+    networks:
+      - relvora-network
+
+  mysql-replica:
+    image: mysql:8.0
+    container_name: mysql-replica
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    depends_on:
+      - mysql-master
+    ports:
+      - "3308:3306"
+    command: >
+      --server-id=2
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --gtid-mode=ON
+      --enforce-gtid-consistency=ON
+      --read-only=ON
+      --bind-address=0.0.0.0
+    volumes:
+      - replica-data:/var/lib/mysql
+      - ./replica-init:/docker-entrypoint-initdb.d
+    networks:
+      - relvora-network
+
+volumes:
+  master-data:
+  replica-data:
+
+networks:
+  relvora-network:
+    driver: bridge
+
