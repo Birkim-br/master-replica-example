@@ -93,7 +93,6 @@ docker exec -it mysql-replica mysql -uroot -prootpassword -e "SHOW REPLICA STATU
 ## Notes ⚠️
 
 - The replica is **read-only**, so no writes are allowed except through replication.  
-- For production, consider adding \`--super-read-only=ON\` on the replica for stricter protection.  
 - Always remove volumes for the first run to ensure init scripts execute.  
 
 ---
